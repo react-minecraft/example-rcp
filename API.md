@@ -9,7 +9,7 @@ RCP (Runtime Communication Protocol) — это jar в `plugins/React/.rcp/provi
 name: example        # имя папки RCP: plugins/React/.rcp/example/
 version: 1.0.0
 mainClass: com.example.rcp.ExampleRCP
-api-version: 1       # должен совпадать с RCPApi.VERSION плагина, иначе RCP не загрузится
+api-version: 1       # должен совпадать с RCPAPI.VERSION плагина, иначе RCP не загрузится
 ```
 
 `name` должен быть одним именем папки, без `/`, `.` и `..`.
@@ -65,5 +65,5 @@ new InferenceResult(
 
 ## Версии
 
-`RCPApi.VERSION` растёт, когда меняется то, что ломает собранные раньше RCP. Плагин грузит только RCP
+`RCPAPI.VERSION` растёт, когда меняется то, что ломает собранные раньше RCP. Плагин грузит только RCP
 с точно таким же `api-version`, поэтому после такого обновления плагина RCP нужно пересобрать под новый api.
