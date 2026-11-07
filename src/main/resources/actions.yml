@@ -1,0 +1,16 @@
+#
+# Example RCP
+#
+
+# The same actions as in the plugin's actions.yml: [msg], [bar], [title], [sound]...
+
+# The status in /react rcps. {degrees} - the snap threshold
+status: "Snap threshold {degrees}°"
+
+# /react snap. {players} - how many players are tracked
+tracking:
+  - "[msg] <gray>Example RCP: tracking <white>{players}</white> players"
+
+# /react snap clear
+cleared:
+  - "[msg] <gray>Example RCP: windows cleared"

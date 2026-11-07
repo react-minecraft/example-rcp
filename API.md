@@ -37,12 +37,12 @@ api-version: 1       # должен совпадать с RCPApi.VERSION пла�
 | `players()`                      | `RCPPlayer` по UUID, по id сущности и всех онлайн                         |
 | `listen(RCPPlayerListener)`      | Повороты, сброс состояния, выход игрока, reload                          |
 | `registerPacketListener(Object)` | Слушатель PacketEvents (`PacketListenerCommon`)                          |
-| `registerCommand(RCPCommand)`    | Подкоманду `/react <name>`                                               |
+| `registerArgument(name, RCPArgument)` | Подкоманду `/react <name>`                                          |
 | `fire(player, InferenceResult)`  | Передачу результата модели в проверку плагина: алерты, наказания, история, события |
 | `status(String)`                 | Строку в `/react rcps` и `%react_model%`                                 |
 
 Имена `alerts`, `verbose`, `reload`, `history`, `reboot`, `rcps` и `help` заняты плагином.
-Команду, которую уже зарегистрировал другой RCP, взять тоже нельзя.
+Имя, которое уже занял другой RCP, взять тоже нельзя.
 
 ## Потоки
 

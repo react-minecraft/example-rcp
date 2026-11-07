@@ -26,7 +26,7 @@ public final class SnapDetector {
     public double record(final @NotNull UUID player, final @NotNull Rotation rotation) {
         final Window window = windows.computeIfAbsent(player, ignored -> new Window());
         synchronized (window) {
-            if (Math.abs(rotation.getDeltaX()) >= SNAP_DEGREES) {
+            if (Math.abs(rotation.deltaX()) >= SNAP_DEGREES) {
                 window.snaps++;
             }
             if (++window.seen < WINDOW) {
