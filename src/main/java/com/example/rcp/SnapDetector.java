@@ -1,6 +1,6 @@
 package com.example.rcp;
 
-import com.g4vrk.react.api.rcp.player.Rotation;
+import com.g4vrk.react.api.rcp.player.RotationSample;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -23,10 +23,10 @@ public final class SnapDetector {
      *
      * @return the probability of cheating once a full window was seen, or -1 before that
      */
-    public double record(final @NotNull UUID player, final @NotNull Rotation rotation) {
+    public double record(final @NotNull UUID player, final float @NotNull [] sample) {
         final Window window = windows.computeIfAbsent(player, ignored -> new Window());
         synchronized (window) {
-            if (Math.abs(rotation.deltaX()) >= SNAP_DEGREES) {
+            if (Math.abs(RotationSample.deltaYaw(sample, 0)) >= SNAP_DEGREES) {
                 window.snaps++;
             }
             if (++window.seen < WINDOW) {

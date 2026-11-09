@@ -3,7 +3,7 @@ package com.example.rcp;
 import com.g4vrk.react.api.rcp.environment.RCPEnvironment;
 import com.g4vrk.react.api.rcp.event.RCPPlayerListener;
 import com.g4vrk.react.api.rcp.player.RCPPlayer;
-import com.g4vrk.react.api.rcp.player.Rotation;
+import com.g4vrk.react.api.rcp.player.RotationSample;
 import com.g4vrk.react.api.rcp.verdict.InferenceResult;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,11 +27,11 @@ final class SnapListener implements RCPPlayerListener {
     }
 
     @Override
-    public void onRotation(final @NotNull RCPPlayer player, final @NotNull Rotation rotation) {
+    public void onRotation(final @NotNull RCPPlayer player, final float @NotNull [] sample) {
         if (!player.inCombat()) {
             return;
         }
-        final double probability = detector.record(player.uniqueId(), rotation);
+        final double probability = detector.record(player.uniqueId(), sample);
         if (probability < 0.0D) {
             return;
         }

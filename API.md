@@ -9,7 +9,7 @@ RCP (Runtime Communication Protocol) — это jar в `plugins/React/.rcp/provi
 name: example        # имя папки RCP: plugins/React/.rcp/example/
 version: 1.0.0
 mainClass: com.example.rcp.ExampleRCP
-api-version: 1       # должен совпадать с RCPAPI.VERSION плагина, иначе RCP не загрузится
+api-version: 3       # должен совпадать с RCPAPI.VERSION плагина, иначе RCP не загрузится
 ```
 
 `name` должен быть одним именем папки, без `/`, `.` и `..`.
@@ -37,12 +37,25 @@ api-version: 1       # должен совпадать с RCPAPI.VERSION пла�
 | `players()`                      | `RCPPlayer` по UUID, по id сущности и всех онлайн                         |
 | `listen(RCPPlayerListener)`      | Повороты, сброс состояния, выход игрока, reload                          |
 | `registerPacketListener(Object)` | Слушатель PacketEvents (`PacketListenerCommon`)                          |
-| `registerArgument(name, RCPArgument)` | Подкоманду `/react <name>`                                          |
+| `commands()`                     | Команды Cloud: `command(label)` даёт билдер с правом `react.command.<label>`, `register(label, builder)` регистрирует |
 | `fire(player, InferenceResult)`  | Передачу результата модели в проверку плагина: алерты, наказания, история, события |
 | `status(String)`                 | Строку в `/react rcps` и `%react_model%`                                 |
 
-Имена `alerts`, `verbose`, `reload`, `history`, `reboot`, `rcps` и `help` заняты плагином.
-Имя, которое уже занял другой RCP, взять тоже нельзя.
+Корневую команду, которая уже есть на сервере (`react` и чужие), взять нельзя. Плагин снимает команды RCP
+при выгрузке.
+
+```java
+final CommandRegistrar commands = environment.commands();
+commands.register("snap", commands.command("snap")
+        .handler(context -> context.sender().sendMessage("snap")));
+```
+
+## Повороты
+
+`onRotation(player, float[] sample)` получает плоский массив из `RotationSample.STRIDE` чисел: `pitch`, `yaw`,
+дельты, рывки и ошибки GCD. Читайте его через `RotationSample.deltaYaw(sample, 0)` и соседние методы.
+Плагин переиспользует массив, поэтому копируйте его, если значения нужны после вызова.
+`RCPPlayer.rotations()` отдаёт историю в том же виде: `RotationSample.count(...)` поворотов подряд.
 
 ## Потоки
 

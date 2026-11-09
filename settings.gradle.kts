@@ -1,7 +1,7 @@
 rootProject.name = "example-rcp"
 
 // Builds against a local plugin checkout instead of the jitpack api when it sits next to this repository.
-val localPlugin = file("../react-vector")
+val localPlugin = file("../plugin")
 if (System.getenv("CI") == null && localPlugin.resolve("api").isDirectory) {
     includeBuild(localPlugin) {
         dependencySubstitution {

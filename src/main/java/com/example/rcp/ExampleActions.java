@@ -9,7 +9,7 @@ import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 /**
- * {@code actions.yml} of the example: what {@code /react snap} shows and the status in {@code /react rcps}.
+ * {@code actions.yml} of the example: what {@code /snap} shows and the status in {@code /react rcps}.
  * <p>
  * The plugin copies the file from the jar on first start and fills keys a newer jar adds.
  */

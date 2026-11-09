@@ -1,13 +1,13 @@
 package com.example.rcp;
 
-import com.g4vrk.functionalActions.defaults.DefaultActions;
+import com.g4vrk.functionalActions.defaults.DefaultActionSet;
 import com.g4vrk.functionalActions.parser.ActionParser;
 import com.g4vrk.functionalActions.parser.impl.SimpleActionParser;
 import com.g4vrk.functionalActions.registry.ActionRegistry;
 import com.g4vrk.functionalActions.registry.impl.SimpleActionRegistry;
 import com.g4vrk.react.api.rcp.environment.RCPEnvironment;
 import com.g4vrk.react.api.rcp.provider.RCPProvider;
-import com.g4vrk.text.LegacySerializers;
+import com.g4vrk.text.LegacySerializerRegistry;
 import net.kyori.adventure.audience.Audience;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.ConfigurateException;
@@ -22,14 +22,14 @@ import org.spongepowered.configurate.ConfigurateException;
 public final class ExampleRCP extends RCPProvider {
 
     private final SnapDetector detector = new SnapDetector();
-    private final SnapArgument snap = new SnapArgument(detector);
+    private final SnapCommand snap = new SnapCommand(detector);
     private final ActionParser<Audience> parser;
 
     public ExampleRCP(final @NotNull RCPEnvironment environment) {
         super(environment);
         final ActionRegistry<Audience> registry = new SimpleActionRegistry<>(true);
-        DefaultActions.Adventure.registerDefaults(
-                registry, LegacySerializers.INSTANCE.universalSerializer()::serialize, ";");
+        DefaultActionSet.Adventure.registerDefaults(
+                registry, LegacySerializerRegistry.INSTANCE.universalSerializer()::serialize, ";");
         this.parser = new SimpleActionParser<>(registry);
     }
 
@@ -37,7 +37,7 @@ public final class ExampleRCP extends RCPProvider {
     public void onEnable() throws ConfigurateException {
         final RCPEnvironment environment = singletonEnvironment();
         environment.listen(new SnapListener(environment, detector));
-        environment.registerArgument("snap", snap);
+        snap.register(environment.commands());
         applyActions(environment);
         environment.logger().info("Example RCP is watching for aim snaps");
     }
