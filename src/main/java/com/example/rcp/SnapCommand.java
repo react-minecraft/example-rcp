@@ -31,9 +31,12 @@ final class SnapCommand {
     }
 
     void register(final @NotNull CommandRegistrar commands) {
-        commands.register("snap", commands.command("snap")
-                .optional("action", StringParser.stringParser(), SuggestionProvider.suggestingStrings("clear"))
-                .handler(context -> execute(context.sender(), context.<String>optional("action").orElse(""))));
+        commands.register(
+                "snap",
+                commands.command("snap")
+                        .optional("action", StringParser.stringParser(), SuggestionProvider.suggestingStrings("clear"))
+                        .handler(context -> execute(context.sender(), context.<String>optional("action").orElse("")))
+        );
     }
 
     private void execute(final @NotNull CommandSender sender, final @NotNull String action) {

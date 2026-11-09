@@ -29,7 +29,10 @@ public final class ExampleRCP extends RCPProvider {
         super(environment);
         final ActionRegistry<Audience> registry = new SimpleActionRegistry<>(true);
         DefaultActionSet.Adventure.registerDefaults(
-                registry, LegacySerializerRegistry.INSTANCE.universalSerializer()::serialize, ";");
+                registry,
+                LegacySerializerRegistry.INSTANCE.universalSerializer()::serialize,
+                ";"
+        );
         this.parser = new SimpleActionParser<>(registry);
     }
 
