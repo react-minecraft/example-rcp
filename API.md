@@ -9,7 +9,7 @@ RCP (Runtime Communication Protocol) — это jar в `plugins/React/.rcp/provi
 name: example        # имя папки RCP: plugins/React/.rcp/example/
 version: 1.0.0
 mainClass: com.example.rcp.ExampleRCP
-api-version: 3       # должен совпадать с RCPAPI.VERSION плагина, иначе RCP не загрузится
+api-version: 2       # должен совпадать с RCPAPI.VERSION плагина, иначе RCP не загрузится
 ```
 
 `name` должен быть одним именем папки, без `/`, `.` и `..`.

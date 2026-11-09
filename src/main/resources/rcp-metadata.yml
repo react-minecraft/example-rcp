@@ -1,4 +1,4 @@
 name: example
 version: ${version}
 mainClass: com.example.rcp.ExampleRCP
-api-version: 3
+api-version: 2
