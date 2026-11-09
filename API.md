@@ -38,17 +38,30 @@ api-version: 2       # должен совпадать с RCPAPI.VERSION пла�
 | `listen(RCPPlayerListener)`      | Повороты, сброс состояния, выход игрока, reload                          |
 | `registerPacketListener(Object)` | Слушатель PacketEvents (`PacketListenerCommon`)                          |
 | `commands()`                     | Команды Cloud: `command(label)` даёт билдер с правом `react.command.<label>`, `register(label, builder)` регистрирует |
+| `actions()`                      | Парсер действий FunctionalActions (`[msg]`, `[sound]`, …) со всеми встроенными действиями плагина |
+| `text()`                         | Форматтер текста плагина (MiniMessage/legacy)                            |
 | `fire(player, InferenceResult)`  | Передачу результата модели в проверку плагина: алерты, наказания, история, события |
 | `status(String)`                 | Строку в `/react rcps` и `%react_model%`                                 |
 
-Корневую команду, которая уже есть на сервере (`react` и чужие), взять нельзя. Плагин снимает команды RCP
-при выгрузке.
+Команды регистрируются прямо в Cloud. Можно создать свой корень или добавить подкоманду в `/react`
+(вместе с его алиасами). При выгрузке плагин снимает только команды этого RCP, а команды плагина и
+других расширений остаются.
 
 ```java
 final CommandRegistrar commands = environment.commands();
 commands.register("snap", commands.command("snap")
         .handler(context -> context.sender().sendMessage("snap")));
+commands.register("react", commands.command("react")
+        .literal("snapinfo")
+        .handler(context -> context.sender().sendMessage("info")));
 ```
+
+## Кадры моделей
+
+RCP может публиковать строки датасета через `environment.listeners().post(new ModelFrameEvent(...))`.
+Аддон подписывается через `environment.listeners().subscribe(ModelFrameEvent.class, ...)`, проверяет
+`model()` и `columns()`, и при этом не зависит от классов RCP. Событие приходит в потоке производителя
+(обычно это поток сущности игрока), поэтому обработчик должен быть быстрым.
 
 ## Повороты
 
