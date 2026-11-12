@@ -1,14 +1,7 @@
 package com.example.rcp;
 
-import com.g4vrk.functionalActions.defaults.DefaultActionSet;
-import com.g4vrk.functionalActions.parser.ActionParser;
-import com.g4vrk.functionalActions.parser.impl.SimpleActionParser;
-import com.g4vrk.functionalActions.registry.ActionRegistry;
-import com.g4vrk.functionalActions.registry.impl.SimpleActionRegistry;
 import com.g4vrk.react.api.rcp.environment.RCPEnvironment;
 import com.g4vrk.react.api.rcp.provider.RCPProvider;
-import com.g4vrk.text.LegacySerializerRegistry;
-import net.kyori.adventure.audience.Audience;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.ConfigurateException;
 
@@ -23,38 +16,38 @@ public final class ExampleRCP extends RCPProvider {
 
     private final SnapDetector detector = new SnapDetector();
     private final SnapCommand snap = new SnapCommand(detector);
-    private final ActionParser<Audience> parser;
 
     public ExampleRCP(final @NotNull RCPEnvironment environment) {
+
         super(environment);
-        final ActionRegistry<Audience> registry = new SimpleActionRegistry<>(true);
-        DefaultActionSet.Adventure.registerDefaults(
-                registry,
-                LegacySerializerRegistry.INSTANCE.universalSerializer()::serialize,
-                ";"
-        );
-        this.parser = new SimpleActionParser<>(registry);
+
     }
 
     @Override
     public void onEnable() throws ConfigurateException {
+
         final RCPEnvironment environment = singletonEnvironment();
         environment.listen(new SnapListener(environment, detector));
         snap.register(environment.commands());
         applyActions(environment);
         environment.logger().info("Example RCP is watching for aim snaps");
+
     }
 
     @Override
     public void onReload() throws ConfigurateException {
+
         detector.clear();
         applyActions(singletonEnvironment());
+
     }
 
-    private void applyActions(final RCPEnvironment environment) throws ConfigurateException {
+    private void applyActions(final @NotNull RCPEnvironment environment) throws ConfigurateException {
+
         final ExampleActions actions = ExampleActions.load(environment.directory(), environment.logger());
-        snap.reload(parser, actions);
+        snap.reload(environment.actions(), actions);
         environment.status(actions.status().replace("{degrees}", Float.toString(SnapDetector.SNAP_DEGREES)));
+
     }
 
 }
