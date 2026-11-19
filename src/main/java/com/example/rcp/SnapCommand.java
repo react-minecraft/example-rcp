@@ -5,19 +5,17 @@ import com.g4vrk.functionalActions.parser.ActionParser;
 import com.g4vrk.react.api.extension.command.CommandRegistrar;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.command.CommandSender;
-import org.incendo.cloud.key.CloudKey;
-import org.incendo.cloud.parser.standard.StringParser;
-import org.incendo.cloud.suggestion.SuggestionProvider;
+import org.incendo.cloud.Command;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * {@code /snap [clear]}: needs the {@code react.command.snap} permission, which the plugin sets.
+ * {@code /react snap [clear]} requires {@code react.command.snap}.
  *
  * <p>The command is a plain Cloud command; the plugin removes it when the RCP is disabled.</p>
  */
 final class SnapCommand {
 
-    private static final CloudKey<String> ACTION = CloudKey.of("action", String.class);
+    private static final String ROOT = "react";
 
     private final SnapDetector detector;
 
@@ -39,22 +37,21 @@ final class SnapCommand {
 
     void register(final @NotNull CommandRegistrar commands) {
 
-        commands.register(
-                "snap",
-                commands.command("snap")
-                        .optional(ACTION, StringParser.stringParser(), SuggestionProvider.suggestingStrings("clear"))
-                        .handler(context -> execute(context.sender(), context.optional(ACTION).orElse("")))
-        );
+        final Command.Builder<CommandSender> snap = commands.command(ROOT).literal("snap").permission("react.command.snap");
+        commands.register(ROOT, snap.handler(context -> showTracking(context.sender())));
+        commands.register(ROOT, snap.literal("clear").handler(context -> clear(context.sender())));
 
     }
 
-    private void execute(final @NotNull CommandSender sender, final @NotNull String action) {
+    private void clear(final @NotNull CommandSender sender) {
 
-        if (action.equalsIgnoreCase("clear")) {
-            detector.clear();
-            cleared.run(sender);
-            return;
-        }
+        detector.clear();
+        cleared.run(sender);
+
+    }
+
+    private void showTracking(final @NotNull CommandSender sender) {
+
         final String players = Integer.toString(detector.tracked());
         tracking.run(sender, text -> text.replace("{players}", players));
 

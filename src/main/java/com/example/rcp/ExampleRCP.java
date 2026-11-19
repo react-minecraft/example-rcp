@@ -27,9 +27,9 @@ public final class ExampleRCP extends RCPProvider {
     public void onEnable() throws ConfigurateException {
 
         final RCPEnvironment environment = singletonEnvironment();
+        applyActions(environment);
         environment.listen(new SnapListener(environment, detector));
         snap.register(environment.commands());
-        applyActions(environment);
         environment.logger().info("Example RCP is watching for aim snaps");
 
     }

@@ -1,0 +1,13 @@
+# Статус в /react rcps. {degrees} — порог угла резкого поворота.
+status: "Порог резкого поворота {degrees}°"
+
+# /react snap. {players} — число отслеживаемых игроков.
+tracking:
+  - "[msg] <color:#6366F1>[Example RCP]</color> <white>Отслеживаемых игроков: {players}."
+
+# /react snap clear
+cleared:
+  - "[msg] <color:#6366F1>[Example RCP]</color> <white>История наблюдений очищена."
+
+# Не меняйте версию конфигурации.
+config-version: 1

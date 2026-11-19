@@ -1,0 +1,13 @@
+# The status in /react rcps. {degrees} is the snap threshold.
+status: "Snap threshold {degrees}°"
+
+# /react snap. {players} is the number of tracked players.
+tracking:
+  - "[msg] <color:#6366F1>[Example RCP]</color> <white>Tracking {players} players."
+
+# /react snap clear
+cleared:
+  - "[msg] <color:#6366F1>[Example RCP]</color> <white>Tracking windows cleared."
+
+# Do not change the configuration version.
+config-version: 1
