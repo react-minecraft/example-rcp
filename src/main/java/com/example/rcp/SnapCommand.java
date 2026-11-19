@@ -19,8 +19,7 @@ final class SnapCommand {
 
     private final SnapDetector detector;
 
-    private ExecutableActionList<? super Audience> tracking;
-    private ExecutableActionList<? super Audience> cleared;
+    private volatile Actions actions;
 
     SnapCommand(final @NotNull SnapDetector detector) {
 
@@ -30,8 +29,7 @@ final class SnapCommand {
 
     void reload(final @NotNull ActionParser<Audience> parser, final @NotNull ExampleActions actions) {
 
-        this.tracking = parser.parseAll(actions.tracking());
-        this.cleared = parser.parseAll(actions.cleared());
+        this.actions = new Actions(parser.parseAll(actions.tracking()), parser.parseAll(actions.cleared()));
 
     }
 
@@ -46,15 +44,24 @@ final class SnapCommand {
     private void clear(final @NotNull CommandSender sender) {
 
         detector.clear();
-        cleared.run(sender);
+        actions.cleared().run(sender);
 
     }
 
     private void showTracking(final @NotNull CommandSender sender) {
 
         final String players = Integer.toString(detector.tracked());
-        tracking.run(sender, text -> text.replace("{players}", players));
+        actions.tracking().run(sender, text -> text.replace("{players}", players));
 
+    }
+
+    /**
+     * A complete, atomically published set of command actions.
+     */
+    private record Actions(
+            ExecutableActionList<? super Audience> tracking,
+            ExecutableActionList<? super Audience> cleared
+    ) {
     }
 
 }
