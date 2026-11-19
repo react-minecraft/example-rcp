@@ -36,7 +36,7 @@ api-version: 2       # должен совпадать с RCPAPI.VERSION пла�
 | `scheduler()`                    | Планировщик Schedula, работает и на Folia                                |
 | `players()`                      | `RCPPlayer` по UUID, по id сущности и всех онлайн                         |
 | `listen(RCPPlayerListener)`      | Повороты, сброс состояния, выход игрока, reload                          |
-| `registerPacketListener(Object)` | Слушатель PacketEvents (`PacketListenerCommon`)                          |
+| `listeners().register(Object)`   | Слушатель React, Bukkit или PacketEvents (`PacketListenerCommon`)       |
 | `commands()`                     | Команды Cloud: `command(label)` даёт билдер с правом `react.command.<label>`, `register(label, builder)` регистрирует |
 | `actions()`                      | Парсер действий FunctionalActions (`[msg]`, `[sound]`, …) со всеми встроенными действиями плагина |
 | `text()`                         | Форматтер текста плагина (MiniMessage/legacy)                            |
@@ -72,10 +72,11 @@ RCP может публиковать строки датасета через `
 
 ## Потоки
 
-- `onRotation` вызывается на потоке netty. Не блокируйте его и не трогайте мир: на поток сервера переходите
-  через `scheduler()`.
-- Регистрировать можно с любого потока.
-- `fire` и методы `RCPPlayer` безопасны с любого потока.
+- `onRotation` вызывается в потоке источника события, обычно netty. Не блокируйте его и не трогайте мир:
+  для работы с игроком переходите через `scheduler()` на поток, владеющий его сущностью.
+- Слушатель игроков через `listen` можно регистрировать с любого потока.
+- `fire` и методы `RCPPlayer` можно вызывать с любого потока, но большинство операций с Bukkit-игроком,
+  возвращённым `bukkit()`, разрешены только в потоке его сущности.
 
 ## InferenceResult
 
