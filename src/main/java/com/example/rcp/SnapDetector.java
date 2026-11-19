@@ -24,8 +24,10 @@ public final class SnapDetector {
      * @return the probability of cheating once a full window was seen, or -1 before that
      */
     public double record(final @NotNull UUID player, final float @NotNull [] sample) {
+
         final Window window = windows.computeIfAbsent(player, ignored -> new Window());
         synchronized (window) {
+
             if (Math.abs(RotationSample.deltaYaw(sample, 0)) >= SNAP_DEGREES) {
                 window.snaps++;
             }
@@ -36,24 +38,37 @@ public final class SnapDetector {
             window.seen = 0;
             window.snaps = 0;
             return probability;
+
         }
+
     }
 
     public int tracked() {
+
         return windows.size();
+
     }
 
     public void forget(final @NotNull UUID player) {
+
         windows.remove(player);
+
     }
 
     public void clear() {
+
         windows.clear();
+
     }
 
+    /**
+     * Mutable counters guarded by this window's monitor.
+     */
     private static final class Window {
+
         private int seen;
         private int snaps;
+
     }
 
 }
