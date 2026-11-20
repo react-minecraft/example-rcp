@@ -4,7 +4,6 @@ import com.g4vrk.react.api.rcp.environment.RCPEnvironment;
 import com.g4vrk.react.api.rcp.event.RCPPlayerListener;
 import com.g4vrk.react.api.rcp.player.RCPPlayer;
 import com.g4vrk.react.api.rcp.player.RotationSample;
-import com.g4vrk.react.api.rcp.verdict.InferenceResult;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -37,11 +36,7 @@ final class SnapListener implements RCPPlayerListener {
         if (!player.inCombat()) {
             return;
         }
-        final double probability = detector.record(player.uniqueId(), sample);
-        if (probability < 0.0D) {
-            return;
-        }
-        environment.fire(player, new InferenceResult("example/snap", "Example Snap", probability, 0.8D, false));
+        detector.record(environment, player, sample);
 
     }
 
