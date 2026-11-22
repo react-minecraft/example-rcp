@@ -9,9 +9,10 @@ repositories {
 }
 
 dependencies {
+    compileOnly("com.github.g4vrk.Schedula:common:b902674126")
     compileOnly("com.github.react-minecraft.plugin:react-api:${property("reactApiVersion")}")
     compileOnly("io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT")
-    compileOnly("com.github.g4vrk.Schedula:common:1.1.0")
+
     compileOnly("org.spongepowered:configurate-yaml:4.2.0")
     compileOnly("org.incendo:cloud-core:2.0.0")
     compileOnly("com.github.g4vrk:FunctionalActions:2.2.0")

@@ -44,7 +44,7 @@ public final class ExampleRCP extends RCPProvider {
 
     private void applyActions(final @NotNull RCPEnvironment environment) throws ConfigurateException {
 
-        final ExampleActions actions = ExampleActions.load(environment.directory(), environment.logger());
+        final ExampleActionConfig actions = ExampleActionConfig.load(environment.directory(), environment.logger());
         snap.reload(environment.actions(), actions);
         environment.status(actions.status().replace("{degrees}", Float.toString(SnapDetector.SNAP_DEGREES)));
 

@@ -4,7 +4,7 @@ import com.g4vrk.functionalActions.list.ExecutableActionList;
 import com.g4vrk.functionalActions.parser.ActionParser;
 import com.g4vrk.react.api.extension.command.CommandRegistrar;
 import net.kyori.adventure.audience.Audience;
-import org.bukkit.command.CommandSender;
+import com.g4vrk.react.api.platform.sender.PlatformSender;
 import org.incendo.cloud.Command;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,7 +19,7 @@ final class SnapCommand {
 
     private final SnapDetector detector;
 
-    private volatile Actions actions;
+    private volatile ActionSet actions;
 
     SnapCommand(final @NotNull SnapDetector detector) {
 
@@ -27,28 +27,28 @@ final class SnapCommand {
 
     }
 
-    void reload(final @NotNull ActionParser<Audience> parser, final @NotNull ExampleActions actions) {
+    void reload(final @NotNull ActionParser<Audience> parser, final @NotNull ExampleActionConfig actions) {
 
-        this.actions = new Actions(parser.parseAll(actions.tracking()), parser.parseAll(actions.cleared()));
+        this.actions = new ActionSet(parser.parseAll(actions.tracking()), parser.parseAll(actions.cleared()));
 
     }
 
     void register(final @NotNull CommandRegistrar commands) {
 
-        final Command.Builder<CommandSender> snap = commands.command(ROOT).literal("snap").permission("react.command.snap");
+        final Command.Builder<PlatformSender> snap = commands.command(ROOT).literal("snap").permission("react.command.snap");
         commands.register(ROOT, snap.handler(context -> showTracking(context.sender())));
         commands.register(ROOT, snap.literal("clear").handler(context -> clear(context.sender())));
 
     }
 
-    private void clear(final @NotNull CommandSender sender) {
+    private void clear(final @NotNull PlatformSender sender) {
 
         detector.clear();
         actions.cleared().run(sender);
 
     }
 
-    private void showTracking(final @NotNull CommandSender sender) {
+    private void showTracking(final @NotNull PlatformSender sender) {
 
         final String players = Integer.toString(detector.tracked());
         actions.tracking().run(sender, text -> text.replace("{players}", players));
@@ -58,7 +58,7 @@ final class SnapCommand {
     /**
      * A complete, atomically published set of command actions.
      */
-    private record Actions(
+    private record ActionSet(
             ExecutableActionList<? super Audience> tracking,
             ExecutableActionList<? super Audience> cleared
     ) {

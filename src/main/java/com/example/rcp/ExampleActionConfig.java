@@ -14,17 +14,17 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
  * The plugin copies the file from the jar on first start and fills keys a newer jar adds.
  */
 @ConfigSerializable
-public record ExampleActions(String status, List<String> tracking, List<String> cleared) {
+public record ExampleActionConfig(String status, List<String> tracking, List<String> cleared) {
 
-    public static @NotNull ExampleActions load(
+    public static @NotNull ExampleActionConfig load(
             final @NotNull Path directory,
             final @NotNull Logger logger
     ) throws ConfigurateException {
 
         final String language = "en".equalsIgnoreCase(System.getProperty("user.language")) ? "en" : "ru";
-        return ConfigFile.builder(ExampleActions.class)
+        return ConfigFile.builder(ExampleActionConfig.class)
                 .path(directory.resolve("actions.yml"))
-                .defaults(ExampleActions.class.getClassLoader(), language + "/actions.yml")
+                .defaults(ExampleActionConfig.class.getClassLoader(), language + "/actions.yml")
                 .logger(logger)
                 .build()
                 .load();

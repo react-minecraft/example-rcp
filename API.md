@@ -32,8 +32,8 @@ api-version: 2       # должен совпадать с RCPAPI.VERSION пла�
 | Метод                            | Что даёт                                                                 |
 |----------------------------------|--------------------------------------------------------------------------|
 | `directory()`                    | Папку `.rcp/<name>/`, созданную заранее                                  |
-| `logger()`, `plugin()`           | Логгер RCP и сам плагин React                                            |
-| `scheduler()`                    | Планировщик Schedula, работает и на Folia                                |
+| `logger()`, `platform()`         | Логгер RCP и доступ к текущей серверной платформе                         |
+| `scheduler()`                    | Schedula: глобальные, асинхронные и привязанные к игроку задачи           |
 | `players()`                      | `RCPPlayer` по UUID, по id сущности и всех онлайн                         |
 | `listen(RCPPlayerListener)`      | Повороты, сброс состояния, выход игрока, reload                          |
 | `listeners().register(Object)`   | Слушатель React, Bukkit или PacketEvents (`PacketListenerCommon`)       |
@@ -50,10 +50,10 @@ api-version: 2       # должен совпадать с RCPAPI.VERSION пла�
 ```java
 final CommandRegistrar commands = environment.commands();
 commands.register("snap", commands.command("snap")
-        .handler(context -> context.sender().sendMessage("snap")));
+        .handler(context -> context.sender().sendMessage(Component.text("snap"))));
 commands.register("react", commands.command("react")
         .literal("snapinfo")
-        .handler(context -> context.sender().sendMessage("info")));
+        .handler(context -> context.sender().sendMessage(Component.text("info"))));
 ```
 
 ## Кадры моделей
@@ -72,11 +72,11 @@ RCP может публиковать строки датасета через `
 
 ## Потоки
 
-- `onRotation` вызывается в потоке источника события, обычно netty. Не блокируйте его и не трогайте мир:
-  для работы с игроком переходите через `scheduler()` на поток, владеющий его сущностью.
+- `onRotation` вызывается в потоке источника события, обычно Netty. Для работы с миром планируйте задачу
+  через `environment.scheduler().scheduleEntity(player.platform(), task, TickSchedule.instant())`.
 - Слушатель игроков через `listen` можно регистрировать с любого потока.
-- `fire` и методы `RCPPlayer` можно вызывать с любого потока, но большинство операций с Bukkit-игроком,
-  возвращённым `bukkit()`, разрешены только в потоке его сущности.
+- Снимки данных `RCPPlayer` и `fire` доступны из любого потока. Нативный объект получается через
+  `player.unwrap(Player.class)` и подчиняется правилам потоков своей платформы.
 
 ## InferenceResult
 
@@ -92,5 +92,5 @@ new InferenceResult(
 
 ## Версии
 
-`RCPAPI.VERSION` растёт, когда меняется то, что ломает собранные раньше RCP. Плагин грузит только RCP
-с точно таким же `api-version`, поэтому после такого обновления плагина RCP нужно пересобрать под новый api.
+В метаданных RCP указывайте `api-version`, совпадающий с `RCPAPI.VERSION` плагина. Для сборок React 2.0.0
+в разработке пересобирайте RCP против той же ревизии React, которую устанавливаете на сервер.
