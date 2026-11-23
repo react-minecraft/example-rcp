@@ -1,5 +1,13 @@
+import org.gradle.api.attributes.java.TargetJvmVersion
+
 plugins {
     java
+}
+
+configurations.configureEach {
+    if (name == "compileClasspath" || name.endsWith("CompileClasspath")) {
+        attributes.attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 17)
+    }
 }
 
 repositories {
@@ -22,7 +30,7 @@ dependencies {
 tasks {
     withType<JavaCompile>().configureEach {
         options.encoding = "UTF-8"
-        options.release.set(17)
+        options.release.set(16)
     }
 
     processResources {
