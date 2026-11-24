@@ -5,7 +5,7 @@
 <p>Шаблон своего RCP для React</p>
 
 <p>
-  <a href="https://github.com/react-minecraft/example-rcp/blob/main/LICENSE">
+  <a href="https://github.com/react-minecraft/example-rcp/blob/master/LICENSE">
     <img src="https://img.shields.io/github/license/react-minecraft/example-rcp?style=plastic&logo=opensourceinitiative&logoColor=white" alt="License">
   </a>
 </p>
