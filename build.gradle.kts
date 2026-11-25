@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("com.github.g4vrk.Schedula:common:b902674126")
+    compileOnly("com.github.g4vrk.Schedula:common:2.0.1")
     compileOnly("com.github.react-minecraft.plugin:react-api:${property("reactApiVersion")}")
     compileOnly("io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT")
 
